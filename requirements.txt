@@ -1,0 +1,5 @@
+pyyaml
+torch
+torchvision
+tqdm
+pillow
