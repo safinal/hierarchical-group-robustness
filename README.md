@@ -19,7 +19,6 @@ The goal is to build a robust image classification system that can:
 
 ## ⚙️ Constraints
 
-### Model Architecture
 - **Required Backbone**: ResNet50 must be used as the feature extractor
 - **Allowed Modifications**: Only changes to the linear classification head are permitted
 - **Training Flexibility**: While the training time is balanced around training only the classification head, you are allowed to train the feature extractor as well
