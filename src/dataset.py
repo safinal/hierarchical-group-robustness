@@ -5,6 +5,7 @@ from PIL import Image
 import os
 
 from src.config import ConfigManager
+from src.sampler import BalancedHierarchicalSampler, CombinedSampler
 
 
 class Node:
@@ -119,10 +120,34 @@ class HiererchicalDataset(torch.utils.data.Dataset):
             yield group
 
 def create_train_dataset_and_loader():
-    # Showcase dataset
+    # Create dataset with level-2 classification
     train_dataset = HiererchicalDataset(dataset_path='train', level=2)
     print("Dataset Length:", f"{len(train_dataset)}")
     train_dataset.tree.print_node(max_level=2)
     print(train_dataset.classes)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=ConfigManager().get("batch_size"), shuffle=True)
+    
+    # Create samplers for each level-2 class
+    samplers = []
+    for level2_class in range(len(train_dataset.classes)):
+        # Get all level-7 groups that belong to this level-2 class
+        level7_groups = []
+        for group in train_dataset.tree.level_iterator(7):
+            if train_dataset.classes[group.name[:2]] == level2_class:
+                level7_groups.append(group.name)
+        
+        # Create sampler for this level-2 class
+        sampler = BalancedHierarchicalSampler(train_dataset, level2_class, level7_groups)
+        samplers.append(sampler)
+    
+    # Create the combined sampler
+    combined_sampler = CombinedSampler(samplers)
+    
+    # Create dataloader with the combined sampler
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset,
+        batch_size=ConfigManager().get("batch_size"),
+        sampler=combined_sampler,
+        num_workers=ConfigManager().get("num_workers")
+    )
+    
     return train_dataset, train_loader

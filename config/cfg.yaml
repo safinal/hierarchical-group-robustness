@@ -1,0 +1,6 @@
+num_epochs: 20
+lr: 0.01
+batch_size: 1024
+logs_dir: "logs"
+num_workers: 64
+checkpoint_path: "checkpoints/chresnet50.pth"

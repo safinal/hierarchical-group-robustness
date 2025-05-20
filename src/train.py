@@ -50,6 +50,7 @@ def train_model(model, train_loader, criterion, optimizer, device, num_epochs):
 
 
         # Save the latest model
+        os.makedirs(ConfigManager().get("logs_dir"), exist_ok=True)
         latest_checkpoint_path = os.path.join(ConfigManager().get("logs_dir"), 'latest_checkpoint.pth')
         torch.save({
             'epoch': epoch,

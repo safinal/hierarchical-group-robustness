@@ -9,7 +9,7 @@ from src.dataset import create_train_dataset_and_loader
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Rayan International AI Contest: Backdoored Model Detection")
-    parser.add_argument("--config", type=str, default="./config/config.yaml", help="Path to the config file")
+    parser.add_argument("--config", type=str, default="./config/cfg.yaml", help="Path to the config file")
     args = parser.parse_args()
     return args
 
@@ -22,6 +22,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train_dataset, train_loader = create_train_dataset_and_loader()
     model = create_model()
+    model.to(device)
     criterion = torch.nn.CrossEntropyLoss()
     # optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
     optimizer = torch.optim.SGD(model.fc.parameters(), lr=ConfigManager().get("lr"))
