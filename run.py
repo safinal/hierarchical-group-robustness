@@ -8,7 +8,7 @@ from src.dataset import create_train_dataset_and_loader
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Rayan International AI Contest: Backdoored Model Detection")
+    parser = argparse.ArgumentParser(description="Rayan International AI Contest: Hierarchical Group Robustness")
     parser.add_argument("--config", type=str, default="./config/cfg.yaml", help="Path to the config file")
     args = parser.parse_args()
     return args
